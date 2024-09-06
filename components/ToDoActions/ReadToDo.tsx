@@ -20,10 +20,13 @@ const handleRead=() =>{
   return (
     <SafeAreaView style={styles.safearea}>
       <View style={styles.container}>
+        <View style = {styles.optionsContainer}>
 
-      <View style={styles.description}>
+        </View>
+
+      <View style={styles.detailsContainer}>
         <ScrollView>
-        <Text style = {styles.titlecontainer}>{title}</Text>
+        <Text >{title}</Text>
         </ScrollView>
       </View>
 
@@ -38,36 +41,39 @@ const handleRead=() =>{
 
 const styles = StyleSheet.create({
   safeArea: {
-    flexGrow: 1,
+    flex: 1,
   },
   container: {
     flexGrow: 1,
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#232533', // Consistent form background
+    backgroundColor: '#232533',
     borderRadius: 10,
     elevation: 5,
     margin: 20,
-    marginBottom:50,
+    marginBottom: 50,
   },
-
-  description: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    alignItems:'center',
-    paddingVertical: 12,
-    paddingHorizontal: 15,
-    borderRadius: 10,
+  detailsContainer: {
+    height: 200,
     elevation: 5,
-    marginVertical: 12,
+    borderColor: '#cccccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    marginBottom: 20,
+    fontSize: 16,
+    color: '#CDCDE0',
+    multiline: 'true',
   },
-  titlecontainer:{
-    color: "#CDCDE0",
-
+  
+  buttonContainer: {
+    flexGrow: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
   
   okButton: {
-    backgroundColor: '#fbc02d', // Consistent button color
+    backgroundColor: '#4CAF50',
     borderRadius: 10,
     paddingVertical: 12,
     paddingHorizontal: 15,
@@ -75,10 +81,9 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 18,
-    color: "#ffffff",
-    fontWeight: "bold",
-    alignSelf: "center",
-    textTransform: "uppercase",
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    textTransform: 'uppercase',
   },
 });
 

@@ -79,7 +79,6 @@ const styles = StyleSheet.create({
   
   container: {
     flexGrow: 1,
-    // height:200,
     justifyContent: 'center',
     padding: 20,
     backgroundColor: '#232533',
@@ -94,8 +93,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   buttonContainer: {
+    flexGrow:1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
   },
   cancelButton: {
     backgroundColor: '#cccccc',
