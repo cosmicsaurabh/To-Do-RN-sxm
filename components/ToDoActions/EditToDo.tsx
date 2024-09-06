@@ -10,6 +10,7 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import {useTodo} from '../../context/TodoProvider';
 import {useTheme} from '../../context/ThemeProvider';
 import CustomButton from '../utils/CustomButton';
+import Toast from 'react-native-toast-message';
 
 function EditToDo() {
   const navigation = useNavigation();
@@ -17,17 +18,19 @@ function EditToDo() {
   const {updateTodoItem} = useTodo();
   const {theme} = useTheme();
 
-  const {item, onUpdate} = route.params as {
-    item: TodoItem;
-    onUpdate: () => void;
-  };
+  const {item} = route.params as {item};
   const [error, setError] = useState('');
   const [title, setTitle] = useState(item.title);
 
+  const truncateText = (text: string, maxLength: number) => {
+    return text.length > maxLength
+    ? `${text.substring(0, maxLength)}...`
+    : text;
+  };
   const handleCancel = () => {
     navigation.goBack();
   };
-
+  const previousTitle = item.title;
   const handleUpdate = async () => {
     try {
       if (title.trim().length === 0) {
@@ -43,11 +46,24 @@ function EditToDo() {
         setError('Random error occurred....hit the update button again');
         return;
       }
-      onUpdate(title);
+      Toast.show({
+        type: 'success',
+        text1: 'Todo Updated',
+        text2: `${truncateText(
+          previousTitle,
+          20,
+        )} has been updated to ${truncateText(title, 20)}.`,
+      });
+      route.params.onGoBack(title);
       navigation.goBack();
     } catch (error) {
       console.error('Error updating todo item', error);
       setError('An error occurred while updating the todo item');
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'There was an error updating the todo item.',
+      });
     }
   };
   const backgroundStyle = {
@@ -74,7 +90,7 @@ function EditToDo() {
         <View style={styles.buttonContainer}>
           <CustomButton
             text="cancel"
-            onPress={() => navigation.goBack()}
+            onPress={() => handleCancel()}
             buttonBGColor="#cccccc"
           />
           <CustomButton

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { SafeAreaView, StyleSheet, View, Text,ScrollView } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -11,9 +11,9 @@ function DetailsToDo() {
   const route = useRoute();
   const {theme} = useTheme();
   const {bookmarkTodoItem} = useTodo();
-
-
+  
   const { todo } = route.params as { todo };
+  const [contentshowing,setContentshowing] = useState(todo.title)
   console.log("todo from detils to do page    ",todo)
   const backgroundStyle = {
     backgroundColor: theme.colors.background,
@@ -23,31 +23,14 @@ function DetailsToDo() {
     ? `${text.substring(0, maxLength)}...`
     : text;
   };
+  
   const handleEditToDo = async (item) => {
+    item.title = contentshowing;
     console.log("todo from detils to do page  handledittodo   ",item)
-    try {
-      const previousTitle = item.title;
-      navigation.navigate('EditToDo', {
-        item,
-        onUpdate: (updatedTitle: Todoitem) => {
-          Toast.show({
-            type: 'success',
-            text1: 'Todo Updated',
-            text2: `${truncateText(
-              previousTitle,
-              20,
-            )} has been updated to ${truncateText(updatedTitle, 20)}.`,
-          });
-        },
-      });
-    } catch (error) {
-      console.error('Error updating todo item', error);
-      Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2: 'There was an error updating the todo item.',
-      });
-    }
+    navigation.navigate('EditToDo', {item,
+      onGoBack: (data) => {
+      setContentshowing(data);
+    },});
   };
   const handleDeleteToDo = async( item )=> {
     navigation.navigate('DeleteToDo', {item });
@@ -124,7 +107,7 @@ function DetailsToDo() {
 
       <View style={styles.detailsContainer}>
         <ScrollView>
-        <Text >{todo.title}</Text>
+        <Text >{contentshowing}</Text>
         </ScrollView>
       </View>
         <CustomButton
