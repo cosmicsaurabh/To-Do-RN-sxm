@@ -19,6 +19,10 @@ import GlobalStyle from '../others/GlobalStyle';
 function BookmarkPage({ navigation }: any): JSX.Element {
   const { theme } = useTheme();
   const {todos, bookmarkTodoItem, loadMoreTodos} = useTodo();
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+
+
 
   const backgroundStyle = {
     backgroundColor: theme.colors.background,
@@ -143,9 +147,6 @@ const handleBookmarkToDo = async item => {
     });
   }
 };
-const [loading, setLoading] = useState(false);
-const [hasMore, setHasMore] = useState(true);
-
 
 const handleLoadMore = async () => {
   if (loading || !hasMore) return;
@@ -323,11 +324,11 @@ tabTitle: {
 fab: {
   position: 'absolute',
   right: 25,
-  bottom: 10,
+  bottom: 25,
   backgroundColor: '#fbc02e',
   borderRadius: 28,
-  width: 40,
-  height: 40,
+  width:60,
+  height: 60,
   justifyContent: 'center',
   alignItems: 'center',
   elevation: 18,

@@ -7,24 +7,32 @@ import Toast from 'react-native-toast-message';
 const TodoContext = createContext();
 
 const TodoProvider = ({children}) => {
+  const [reload, setReload] = useState(false);
   const {user,isLoggedIn} = useAuth();
   const [todos, setTodos] = useState([]);
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false); 
   const [allTodos, setAllTodos] = useState([]);
-  const [error, setError] = useState(null);
   const ITEMS_PER_PAGE = 10;
 
+  const resetTodos = () => {
+    setTodos([]);
+    setPage(1);
+    setAllTodos([]);
+    setLoading(false);
+  };
+
   useEffect(() => {
-    
     if (isLoggedIn && user) {
       fetchInitialTodos();
+
     } else {
-      setTodos([]);
-      setPage(1);
-      setAllTodos([]);
-      setError(null);
+      resetTodos();
     }
-  }, [user,isLoggedIn]);
+  }, [user,isLoggedIn,reload]);
+
+  
+
   const showToast = message => {
     Toast.show({
       type: 'error',
@@ -33,12 +41,29 @@ const TodoProvider = ({children}) => {
       text2: message,
     });
   };
+
+  const showRetryToast = (message, retryAction) => {
+    Toast.show({
+      type: 'error',
+      text1: message,
+      text2: 'Tap to retry',
+      position: 'top',
+      onPress: retryAction, 
+      visibilityTime: 5000, 
+      autoHide: true,
+      bottomOffset: 40,
+    });
+  };
   const fetchInitialTodos = async () => {
-    await wait(200); // Simulate network delay
+    setLoading(true);
+    await wait(200); 
     if (Math.random() < 0.2) {
       const randomError = 'Random error occurred during initial fetch';
       console.error(randomError);
-      showToast(randomError);
+      console.log("retry")
+      console.log("retry afte 2")
+      showRetryToast(randomError, () => setReload(!reload));
+      setLoading(false);
       return;
     }
     
@@ -49,24 +74,24 @@ const TodoProvider = ({children}) => {
         setAllTodos(userTodos);
         setTodos(userTodos.slice(0, ITEMS_PER_PAGE));
         setPage(1);
-        console.log("all users ", storedUsers)
-        console.log("current users ", currentUser)
-        console.log("userTodds ", userTodos)
       } catch (err) {
         console.error('Error fetching todos:', err);
-        setError('Failed to load todos. Please try again.');
-        showToast('Failed to load todos. Please try again.');
+        showRetryToast('Failed to load todos. Please try again.', () => setReload(!reload));
+        setLoading(false);
+        
       }
     
   };
 
   const loadMoreTodos = async() => {
+    setLoading(true);
     await wait(200); // Simulate network delay
-    if (Math.random() < 0.001) {
+    if (Math.random() < 0.2) {
       const randomError = 'Random error occurred during loadmore ';
       console.error(randomError);
-      showToast(randomError);
-      return;
+      showRetryToast(randomError, loadMoreTodos);
+      setLoading(false);
+      return { hasMore:true };
     }
     try {
       const newPage = page + 1;
@@ -83,11 +108,13 @@ const TodoProvider = ({children}) => {
       return { hasMore:true };
     } catch (err) {
       console.error('Error loading more todos:', err);
-      setError('Failed to load more todos. Please try again.');
-      showToast('Failed to load more todos. Please try again.');
+      showRetryToast('Failed to load more todos. Please try again.', loadMoreTodos);      
       return { hasMore:false };
+    } finally {
+      setLoading(false); 
     }
-  };
+    }
+
 
   const saveTodos = async (updatedTodos) => {
     if (user) {
@@ -103,7 +130,6 @@ const TodoProvider = ({children}) => {
         }
       } catch (err) {
         console.error('Error saving todos:', err);
-        setError('Failed to save todos. Please try again.');
         showToast('Failed to save todos. Please try again.');
       }
     }
@@ -117,21 +143,18 @@ const TodoProvider = ({children}) => {
       await saveTodos(updatedTodos);
     } catch (err) {
       console.error('Error bookmarking todo:', err);
-      setError('Failed to bookmark todo. Please try again.');
       showToast('Failed to bookmark todo. Please try again.');
     }
   };
 
   const addTodoItem = async (title, bookmarked) => {
-    if (title.length < 3) {
-      throw new Error('Title must be at least 3 characters long');
-    }
+    
     await wait(200); // Simulate network delay
-    if (Math.random() < 0.2) {
+    if (Math.random() < 0.1) {
       const randomError = 'Random error occurred during add To-Do';
       console.error(randomError);
       showToast(randomError);
-      return;
+      return "randomm";
     }
     try {
       const newTodo = {
@@ -140,25 +163,24 @@ const TodoProvider = ({children}) => {
         done: false,
         bookmarked:bookmarked,
       };
-      console.log("alltodos ",allTodos)
-      console.log("newtodo ",newTodo)
+      //console.log("alltodos ",allTodos)
+      //console.log("newtodo ",newTodo)
       const updatedTodos = [...allTodos, newTodo];
-      console.log("ipdated todo " ,updatedTodos)
+      //console.log("ipdated todo " ,updatedTodos)
       await saveTodos(updatedTodos);
     } catch (err) {
       console.error('Error adding todo:', err);
-      setError('Failed to add todo. Please try again.');
       showToast('Failed to add todo. Please try again.');
     }
   };
 
   const updateTodoItem = async updatedTodo => {
     await wait(200); // Simulate network delay
-    if (Math.random() < 0.2) {
+    if (Math.random() < .2) {
       const randomError = 'Random error occurred during updating To-Do';
       console.error(randomError);
       showToast(randomError);
-      return;
+      return "randomm";
     }
     try {
       const updatedTodos = allTodos.map(todo =>
@@ -167,25 +189,23 @@ const TodoProvider = ({children}) => {
       await saveTodos(updatedTodos);
     } catch (err) {
       console.error('Error updating todo:', err);
-      setError('Failed to update todo. Please try again.');
       showToast('Failed to update todo. Please try again.');
     }
   };
 
   const deleteTodoItem = async todo_id => {
     await wait(200); // Simulate network delay
-    if (Math.random() < 0.2) {
+    if (Math.random() < .2) {
       const randomError = 'Random error occurred during Deleting To-Do';
       console.error(randomError);
       showToast(randomError);
-      return;
+      return "randomm";
     }
     try {
       const updatedTodos = allTodos.filter(todo => todo.todo_id !== todo_id);
       await saveTodos(updatedTodos);
     } catch (err) {
       console.error('Error deleting todo:', err);
-      setError('Failed to delete todo. Please try again.');
       showToast('Failed to delete todo. Please try again.');
     }
   };

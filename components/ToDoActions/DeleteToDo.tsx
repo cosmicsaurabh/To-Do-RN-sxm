@@ -3,12 +3,49 @@ import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity } from 'react-na
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTodo } from '../../context/TodoProvider';
 import { useTheme } from '../../context/ThemeProvider';
+import Toast from 'react-native-toast-message';
+
+
 function DeleteToDo() {
   const navigation = useNavigation();
-  const {   deleteTodoItem } = useTodo();
+  const { deleteTodoItem } = useTodo();
   const{theme}  = useTheme();
+
   const route = useRoute();
-  const { item, onUpdate } = route.params as { item: { id: string}, onUpdate: () => void };
+  const { item } = route.params;
+
+  const truncateText = (text: string, maxLength: number) => {
+    return text.length > maxLength
+      ? `${text.substring(0, maxLength)}...`
+      : text;
+  };
+
+  const handleDelete = async () => {
+    try {
+      const status = await deleteTodoItem(item.todo_id);
+      Toast.show({
+        type: 'success',
+        text1: 'Todo Deleted',
+        text2: `${truncateText(item.title, 20)} has been deleted.`,
+      });
+      if(status === "randomm") {
+        Toast.show({
+          type: 'success',
+          text1: 'Todo Deleted',
+          text2: 'Random error occurred....hit the delete button again',
+        });
+        return;
+      }
+      navigation.goBack();
+    } catch (error) {
+      console.error('Error deleting todo item', error);
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'There was an error deleting the todo item.',
+      });
+    }
+  };
 
   const backgroundStyle = {
     backgroundColor: theme.colors.background,
@@ -24,11 +61,7 @@ function DeleteToDo() {
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.cancelButton}>
             <Text style={[styles.buttonText,{ color: theme.colors.text }]}>Cancel</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={async () => {
-              await deleteTodoItem(item.id);
-              onUpdate();
-              navigation.goBack();
-            }} style={styles.deleteButton}>
+          <TouchableOpacity onPress={handleDelete} style={styles.deleteButton}>
             <Text style={[styles.buttonText,{ color: theme.colors.text }]}>Delete</Text>
           </TouchableOpacity>
           </View>

@@ -1,4 +1,4 @@
-import React, { useState,useEffect} from 'react';
+import React, { useState} from 'react';
 import {
   SafeAreaView,
   FlatList,
@@ -13,17 +13,19 @@ import {useTodo} from '../../context/TodoProvider';
 import ToggleSwitch from 'toggle-switch-react-native';
 import { useTheme } from '../../context/ThemeProvider';
 import GlobalStyle from '../others/GlobalStyle';
-type TodoItem = {
-  id: string;
-  title: string;
-  done: boolean;
-  bookmarked: boolean;
-};
+
 
 function HomePage({navigation}: any): JSX.Element {
-  const {todos, bookmarkTodoItem, loadMoreTodos} =
-    useTodo();
-    const {theme} = useTheme();
+  const {todos, bookmarkTodoItem, loadMoreTodos} = useTodo();
+  const {theme} = useTheme();
+
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [isBookmarkedToggled,setIsBookmarkedToggled] = useState(false);
+  let bookmarkedtodos  =[];
+  if(isBookmarkedToggled){
+    bookmarkedtodos = todos.filter(that => that.bookmarked)
+  } 
 
   const truncateText = (text: string, maxLength: number) => {
     return text.length > maxLength
@@ -31,18 +33,9 @@ function HomePage({navigation}: any): JSX.Element {
       : text;
   };
 
-  const handleDeleteToDo = async item => {
+  const handleDeleteToDo = async( item )=> {
     try {
-      navigation.navigate('DeleteToDo', {
-        item,
-        onUpdate: () => {
-          Toast.show({
-            type: 'success',
-            text1: 'Todo Deleted',
-            text2: `${truncateText(item.title, 20)} has been deleted.`,
-          });
-        },
-      });
+      navigation.navigate('DeleteToDo', {item });
     } catch (error) {
       console.error('Error deleting todo item', error);
       Toast.show({
@@ -55,7 +48,6 @@ function HomePage({navigation}: any): JSX.Element {
 
   const handleAddToDo = async () => {
     const inbookmarked = isBookmarkedToggled?true:false;
-    // console.log("->>>>>>>>>>>",inbookmarked)
     try {
       navigation.navigate('AddToDo', {
         onUpdate: (newlyaddedtitle: newtitle) => {
@@ -145,15 +137,6 @@ function HomePage({navigation}: any): JSX.Element {
       });
     }
   };
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-  const [isBookmarkedToggled,setIsBookmarkedToggled] = useState(false);
-  let bookmarkedtodos  =[];
-  if(isBookmarkedToggled){
-    bookmarkedtodos = todos.filter(that => that.bookmarked)
-  } 
-  
-
   const handleLoadMore = async () => {
     if (loading || !hasMore) return;
     setLoading(true);
@@ -223,9 +206,9 @@ function HomePage({navigation}: any): JSX.Element {
           renderItem={renderTodoItem}
           keyExtractor={item => item.todo_id}
           onEndReached={handleLoadMore}
-          onEndReachedThreshold={0.1}
+          onEndReachedThreshold={0.01}
           ListFooterComponent={
-            loading ? <Text style={styles.loadingText}>Loading...</Text> : null
+            loading ? <Text style={[styles.loadingText, { color: theme.colors.text }]}>Loading...</Text> : null
           }
           />
         )}
@@ -325,11 +308,11 @@ const styles = StyleSheet.create({
   fab: {
     position: 'absolute',
     right: 25,
-    bottom: 10,
+    bottom: 25,
     backgroundColor: '#fbc02e',
     borderRadius: 28,
-    width: 40,
-    height: 40,
+    width: 60,
+    height: 60,
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 18,

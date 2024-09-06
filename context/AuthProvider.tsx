@@ -90,9 +90,11 @@ export const AuthProvider = ({ children }) => {
           showsuccessToast('👍! Signed in  successfully !!!');
           return { success: true, message: 'Sign in successful.' };
         } else {
+          showToast("🧐 Credentials doesn't seems to be matching");
           return { success: false, message: 'Invalid password or token.' };
         }
       } else {
+        showToast("🧐 User not found....register first");
         return { success: false, message: 'User not found.' };
       }
     } catch (error) {
@@ -120,7 +122,6 @@ export const AuthProvider = ({ children }) => {
 
       const checkemail = userInfo?.data?.user?.email;
       const checkphone = userInfo?.data?.user?.phoneNumber;
-      console.log("checjpone",checkphone);
       
       const storedUsers = await AsyncStorage.getItem('users');
       const users = storedUsers ? JSON.parse(storedUsers) : [];
@@ -208,15 +209,15 @@ export const AuthProvider = ({ children }) => {
   const confirmCodeAndSignInOrSignUp = async (phoneNumber,confirmation, code) => {
     try {
       const result = await confirmation.confirm(code);
-      console.log(result,"     OTP  VERIFIED");
+      //console.log(result,"     OTP  VERIFIED");
 
       const checkphone = phoneNumber;
       const storedUsers = await AsyncStorage.getItem('users');
       const users = storedUsers ? JSON.parse(storedUsers) : [];
-      console.log("users -> ",users);
+      //console.log("users -> ",users);
       
       const userData = users.find(user => user.phone === checkphone);
-      console.log("userData->  ",userData);
+      //console.log("userData->  ",userData);
       if (userData) {
         setUser(userData);
         setIsLoggedIn(true);

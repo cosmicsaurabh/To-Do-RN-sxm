@@ -20,7 +20,11 @@ function EditToDo() {
         setError('Content cannot be empty');
         return;
       }
-      await updateTodoItem({ ...item, title });
+      const status = await updateTodoItem({ ...item, title });
+      if(status === "randomm") {
+        setError('Random error occurred....hit the update button again')
+        return;
+      }
       onUpdate(title);
       navigation.goBack();
     } catch (error) {

@@ -1,42 +1,21 @@
 import { View,Image, Text, StyleSheet, ScrollView,SafeAreaView } from 'react-native';
-import React, { useEffect } from 'react';
-import LogoutButton from './LogoutButton';
+import React from 'react';
+import LogoutButton from '../utils/LogoutButton';
 import { useAuth } from '../../context/AuthProvider';
-import DeleteUserButton from './DeleteUserButton';
-import ToggleSwitch from 'toggle-switch-react-native';
+import DeleteUserButton from '../utils/DeleteUserButton';
 import { useTheme } from '../../context/ThemeProvider';
 import GlobalStyle from '../others/GlobalStyle';
-import Icon from 'react-native-vector-icons/Ionicons';
-import Toast from 'react-native-toast-message';
+import ThemeToggleSwitch from '../utils/ThemeToggleSwitch';
 
 export default function ProfilePage() {
   const { user, isLoggedIn } = useAuth();
-  const { theme, toggleTheme, isDarkTheme } = useTheme();
+  const { theme } = useTheme();
 
   if (!isLoggedIn || !user) return null;
   const backgroundStyle = {
     backgroundColor: theme.colors.background,
   };
-  const showsuccessToast = (message) => {
-    Toast.show({
-      type: 'success',
-      position: 'bottom',
-      text1: 'Success',
-      text2: message,
-    });
-  };
-  const hanldetoggleTheme = () =>{
-    toggleTheme();
-    if(isDarkTheme){
-      
-      showsuccessToast("It's 🌤️ Now take care !");
-    }
-    else{
-      
-      showsuccessToast("It's 🌌 Now Beware !");
-    }
-  }
-
+ 
   return (
     <SafeAreaView style={[styles.safearea, backgroundStyle]}>
       <View style={styles.header}>
@@ -45,21 +24,8 @@ export default function ProfilePage() {
       </View>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.themeToggle}>
-        <Icon
-              name={isDarkTheme ? 'sunny' : 'moon'}
-              size={40}
-              color={theme.colors.text}
-              style={styles.themeIcon}
-            />
-          
-          <ToggleSwitch
-            isOn={isDarkTheme}
-            offColor="#4E4E50"
-            onColor="#E5E5E5"
-            labelStyle={{ color: theme.colors.text, fontWeight: '600' }}
-            size="large"
-            onToggle={hanldetoggleTheme}
-            />
+
+        <ThemeToggleSwitch/>
             </View>
         <View style={styles.userInfo}>
           <Text style={[styles.label,GlobalStyle.CustomFont, { color: theme.colors.text }]}>User_id:</Text>
@@ -76,7 +42,7 @@ export default function ProfilePage() {
         source = {{uri:user.profilePic}} />
         : <Text style={[styles.info,GlobalStyle.CustomFont, { color: theme.colors.text }]}>No image found in db</Text>
           }
-          {/* <Text style={[styles.info,GlobalStyle.CustomFont, { color: theme.colors.text }]}>{user.todos[0]}</Text> */}
+          
         </View>
 
       </ScrollView>
@@ -134,9 +100,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 10,
   },
-  themeIcon: {
-    marginRight: 10,
-  },
+  
   fab: {
     position: 'absolute',
     right: 25,

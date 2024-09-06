@@ -48,7 +48,7 @@ const ThemeProvider = ({ children }) => {
   const theme = useMemo(() => (isDarkTheme ? DarkTheme : DefaultTheme), [isDarkTheme]);
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, isDarkTheme }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   );

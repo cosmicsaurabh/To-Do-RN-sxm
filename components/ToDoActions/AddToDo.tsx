@@ -21,8 +21,16 @@ function AddToDo() {
         setError('Title cannot be empty');
         return;
       }
+      if (title.trim().length < 3) {
+        setError('Title must be at least 3 char long');
+        return;
+      }
       setError(''); // Clear previous errors
-      await addTodoItem(title,inbookmarked);
+      const status =  await addTodoItem(title,inbookmarked);
+      if(status === "randomm") {
+        setError('Random error occurred....hit the create button again')
+        return;
+      }
       onUpdate(title);
       navigation.goBack();
     } catch (error) {

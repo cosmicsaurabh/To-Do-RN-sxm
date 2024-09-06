@@ -5,10 +5,10 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { useTheme } from '../../context/ThemeProvider';
 
 import HomePage from '../Pages/HomePage';
-import AddToDo from '../Pages/AddToDo';
-import ReadToDo from '../Pages/ReadToDo';
-import EditToDo from '../Pages/EditToDo';
-import DeleteToDo from '../Pages/DeleteToDo';
+import AddToDo from '../ToDoActions/AddToDo';
+import ReadToDo from '../ToDoActions/ReadToDo';
+import EditToDo from '../ToDoActions/EditToDo';
+import DeleteToDo from '../ToDoActions/DeleteToDo';
 import ProfilePage from '../Pages/ProfilePage';
 import BookmarkPage from '../Pages/BookmarkPage';
 
