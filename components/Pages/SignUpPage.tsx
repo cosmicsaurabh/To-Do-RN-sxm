@@ -5,7 +5,7 @@ import { useAuth } from '../../context/AuthProvider';
 import { useTheme } from '../../context/ThemeProvider';
 import Icon from 'react-native-vector-icons/Ionicons';
 import SignUpForm from '../utils/SignUpForm';
-
+import CustomButton from '../utils/CustomButton';
 
 const SignUpPage = () => {
   const { googleSignUp } = useAuth();
@@ -27,23 +27,26 @@ const SignUpPage = () => {
   };
 
   return (
-    <SafeAreaView style={[styles.safearea, backgroundStyle]}>
+    <SafeAreaView style={styles.safearea} backgroundColor = {theme.colors.background}>
     <ScrollView contentContainerStyle={styles.container}>
       
-      <View style={styles.formContainer}>
+      <View style={styles.formContainer} backgroundColor = {theme.colors.cardbgcolor}>
 
 
        <SignUpForm/>
 
-        <TouchableOpacity onPress={handleGoogleSignUp} style={styles.googleButton}>
-        <Icon name="logo-google" size={24} color="white" />
-            <Text style={styles.buttonText}> Sign Up</Text>
-          </TouchableOpacity>
+          <CustomButton
+              both = "true"
+              iconname="logo-google"
+              text=" Sign Up"
+              onPress={() => handleGoogleSignUp()}
+              buttonBGColor={theme.colors.googleloginsigninbutton}
+            />
 
 
 
-        <View style={styles.signinContainer}>
-          <Text style={styles.signinText}>Already have an account?</Text>
+        <View style={styles.signinContainer} >
+          <Text style={styles.signinText} color = {theme.colors.text}>Already have an account?</Text>
           <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
             <Text style={styles.signinButton}>Sign in</Text>
           </TouchableOpacity>
@@ -70,20 +73,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     elevation: 5,
   },
-  signupButton: {
-    marginVertical: 20,
-    elevation: 8,
-    backgroundColor: "#fbc02d",
-    borderRadius: 10,
-    paddingVertical: 12,
-    paddingHorizontal: 15,
-  },
-  buttonText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    alignSelf: "center",
-    textTransform: "uppercase",
-  },
+  
+  
   signinContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -98,18 +89,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#007bff',
     marginLeft: 5,
-  },
-  googleButton: {
-    flexGrow:1,
-    flexDirection:'row',
-    alignItems:'center',
-    justifyContent:'center',
-    marginVertical: 20,
-    elevation: 8,
-    backgroundColor: "#db4437",
-    borderRadius: 10,
-    paddingVertical: 12,
-    paddingHorizontal: 15,
   },
   errorText: {
     color: 'red',

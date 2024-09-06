@@ -1,8 +1,8 @@
 import React from 'react';
-import { Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { Alert } from 'react-native';
 import { useAuth } from '../../context/AuthProvider';
 import { useTheme } from '../../context/ThemeProvider';
+import CustomButton from './CustomButton';
 
 const LogoutButton = () => {
   const { logout } = useAuth();
@@ -28,30 +28,13 @@ const LogoutButton = () => {
   };
 
   return (
-    <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
-      <Icon name="log-out-outline" size={24} color={theme.dark? "black" : "white"} />
-    </TouchableOpacity>
+    <CustomButton
+        iconname = 'log-out-outline'
+        onPress={() => handleLogout()}
+        buttonBGColor={ theme.colors.logoutbutton}
+        />
+    
   );
 };
 
 export default LogoutButton;
-
-const styles = StyleSheet.create({
-  logoutButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#FF5733',
-    borderRadius: 10,
-    padding: 10,
-    height: '100%', 
-    justifyContent: 'center',
-    borderWidth:1,
-    borderStyle:'dashed',
-    borderColor: "black",
-  },
-  logoutText: {
-    color: 'white',
-    fontSize: 16,
-    marginLeft: 10,
-  },
-});

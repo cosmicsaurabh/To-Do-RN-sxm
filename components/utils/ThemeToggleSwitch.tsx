@@ -40,8 +40,9 @@ const ThemeToggleSwitch = () => {
 
       <ToggleSwitch
         isOn={theme.dark}
-        offColor="#4E4E50"
-        onColor="#E5E5E5"
+        offColor='#232533'
+        
+        onColor="#DAD8C9"
         labelStyle={{color: theme.colors.text, fontWeight: '600'}}
         size="large"
         onToggle={hanldetoggleTheme}

@@ -1,8 +1,8 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthProvider';
-import {  Text,StyleSheet, TouchableOpacity,Alert } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import {  Alert } from 'react-native';
 import { useTheme } from '../../context/ThemeProvider';
+import CustomButton from './CustomButton';
 
 const DeleteUserButton = ()=>{
     const {deleteUser} = useAuth();
@@ -27,10 +27,12 @@ const DeleteUserButton = ()=>{
       };
 
     return (
-        <TouchableOpacity onPress={handleDeleteUser} style={styles.deleteuserButton}>
-          <Icon name="warning-outline" size={24} color={theme.dark? "black" : "white"} />
-          <Text style={[styles.deleteuserText ,{ color: theme.colors.text }]}>Delete User !!!</Text>
-        </TouchableOpacity>
+      <CustomButton
+        iconname = 'warning-outline'
+        onPress={() => handleDeleteUser()}
+        buttonBGColor={ theme.colors.deleteuserbutton}
+        />
+
       );
     };
     
@@ -38,21 +40,3 @@ const DeleteUserButton = ()=>{
 export default DeleteUserButton;
 
 
-const styles = StyleSheet.create({
-    deleteuserButton: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      backgroundColor: '#fbc02d',
-      borderRadius: 10,
-      borderWidth:2,
-      borderStyle:'dashed',
-      padding: 10,
-      height: '100%', 
-      justifyContent: 'center',
-    },
-    deleteuserText: {
-      color: 'white',
-      fontSize: 20,
-      marginLeft: 10,
-    },
-  });

@@ -4,8 +4,6 @@ import {
   TextInput,
   StyleSheet,
   View,
-  Alert,
-  TouchableOpacity,
   Text,
 } from 'react-native';
 import {useRoute, useNavigation} from '@react-navigation/native';
@@ -17,9 +15,6 @@ import CustomButton from '../utils/CustomButton';
 function AddToDo() {
   const {addTodoItem} = useTodo();
   const {theme} = useTheme();
-  const backgroundStyle = {
-    backgroundColor: theme.colors.background,
-  };
 
   const navigation = useNavigation();
   const route = useRoute();
@@ -73,18 +68,17 @@ function AddToDo() {
   };
 
   return (
-    <SafeAreaView style={[styles.safearea, backgroundStyle]}>
-      <View style={styles.container}>
-        <View style={styles.textContainer}>
+    <SafeAreaView style={styles.safeArea} backgroundColor = {theme.colors.background}>
+      <View style={styles.container} backgroundColor = {theme.colors.cardbgcolor}>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { color: theme.colors.text },{backgroundColor :theme.colors.cardincardbgcolor}] }
             multiline
             value={title}
             onChangeText={setTitle}
             placeholder="Enter Todo Title"
             placeholderTextColor="#999999"
+          
           />
-        </View>
         <View style={styles.errorContainer}>
           {error ? <Text style={styles.errorText}>{error}</Text> : null}
         </View>
@@ -92,12 +86,12 @@ function AddToDo() {
         <CustomButton
             text="cancel"
             onPress={() => navigation.goBack()}
-            buttonBGColor="#cccccc"
-          />
+            buttonBGColor={ theme.colors.cancel}
+            />
           <CustomButton
             text="Create"
             onPress={() => handleAdd()}
-            buttonBGColor="#4caf50"
+            buttonBGColor={ theme.colors.create}
           />
         </View>
       </View>
@@ -119,9 +113,6 @@ const styles = StyleSheet.create({
     margin: 20,
     marginBottom: 50,
   },
-  textContainer: {
-    flexGrow: 1,
-  },
   errorContainer: {
     flexGrow: 1,
   },
@@ -131,7 +122,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   input: {
-    height: 200,
+    height: 600,
     elevation: 5,
     borderColor: '#cccccc',
     borderWidth: 1,

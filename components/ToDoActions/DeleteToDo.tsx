@@ -47,26 +47,22 @@ function DeleteToDo() {
     }
   };
 
-  const backgroundStyle = {
-    backgroundColor: theme.colors.background,
-  };
-
   return (
-    <SafeAreaView style={[styles.safearea, backgroundStyle]}>
+    <SafeAreaView style={styles.safearea} backgroundColor = {theme.colors.background}>
 
-      <View style={styles.container}>
-        <Text style={styles.confirmationText}>Are you sure you want to delete this To-Do?</Text>
+      <View style={styles.container} backgroundColor = {theme.colors.cardbgcolor}>
+        <Text style={[styles.confirmationText, { color: theme.colors.text }] }>Are you sure you want to delete this To-Do?</Text>
         
         <View style={styles.buttonContainer}>
         <CustomButton
             text="cancel"
             onPress={() => navigation.goBack()}
-            buttonBGColor="#cccccc"
+            buttonBGColor={ theme.colors.cancel}
           />
           <CustomButton
             text="Delete"
             onPress={() => handleDelete()}
-            buttonBGColor="#f44336"
+            buttonBGColor={ theme.colors.delete}
           />
           </View>
       </View>
@@ -85,7 +81,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#232533',
     borderRadius: 10,
     elevation: 5,
     margin: 20,

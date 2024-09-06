@@ -1,9 +1,10 @@
-import { View, Text,TouchableOpacity,StyleSheet } from 'react-native'
+import { Text,StyleSheet,View } from 'react-native'
 import React,{useState} from 'react'
 import FormField from './FormField'
 import { useAuth } from '../../context/AuthProvider'
 import { useTheme } from '../../context/ThemeProvider'
 import Toast from 'react-native-toast-message'
+import CustomButton from './CustomButton'
 
 const VerifyOTP = ({confirmation}) => {
     const {confirmCodeAndSignInOrSignUp}  = useAuth();
@@ -43,34 +44,18 @@ const VerifyOTP = ({confirmation}) => {
     {errorText ? (
         <Text style={styles.errorText}>{errorText}</Text>
     ) : null}
-    <TouchableOpacity onPress={handleOTPVerification} style={styles.loginButton}>
-        <Text style={[styles.buttonText, { color: theme.colors.text }]}>
-        Verify OTP
-        </Text>
-    </TouchableOpacity>
+    
+    <CustomButton
+        text = 'Verify OTP'
+        onPress={() => handleOTPVerification()}
+        buttonBGColor={ theme.colors.mobilesigninbutton}
+        />
     </>
   )
 }
 export default VerifyOTP;
 const styles = StyleSheet.create({
-  
-    loginButton: {
-      marginVertical: 20,
-      elevation: 8,
-      backgroundColor: '#fbc02d',
-      borderRadius: 10,
-      paddingVertical: 12,
-      paddingHorizontal: 15,
-    },
-    
-    buttonText: {
-      fontSize: 18,
-      fontWeight: 'bold',
-      alignSelf: 'center',
-      textTransform: 'uppercase',
-    },
-    
-    errorText: {
+  errorText: {
       color: 'red',
       fontSize: 16,
       marginBottom: 10,

@@ -66,24 +66,20 @@ function EditToDo() {
       });
     }
   };
-  const backgroundStyle = {
-    backgroundColor: theme.colors.background,
-  };
-
+  
   return (
-    <SafeAreaView style={[styles.safearea, backgroundStyle]}>
-      <View style={styles.container}>
-        <View style={styles.textContainer}>
+    <SafeAreaView style={styles.safearea} backgroundColor = {theme.colors.background}>
+      <View style={styles.container} backgroundColor = {theme.colors.cardbgcolor}>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { color: theme.colors.text },{backgroundColor :theme.colors.cardincardbgcolor}] }
             value={title}
             multiline
             onChangeText={setTitle}
             placeholder="Update Todo Title"
             placeholderTextColor="#999999"
             numberOfLines={5}
+            
           />
-        </View>
         <View style={styles.errorContainer}>
           {error ? <Text style={styles.errorText}>{error}</Text> : null}
         </View>
@@ -91,12 +87,12 @@ function EditToDo() {
           <CustomButton
             text="cancel"
             onPress={() => handleCancel()}
-            buttonBGColor="#cccccc"
+            buttonBGColor={ theme.colors.cancel}
           />
           <CustomButton
             text="Update"
             onPress={() => handleUpdate()}
-            buttonBGColor="#fbc02d"
+            buttonBGColor={ theme.colors.update}
           />
         </View>
       </View>
@@ -112,7 +108,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#232533',
     borderRadius: 10,
     elevation: 5,
     margin: 20,
@@ -130,7 +125,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   input: {
-    height: 200,
+    flexGrow:1,
+    alignItems:'center',
+    height: 600,
     elevation: 5,
     borderColor: '#cccccc',
     borderWidth: 1,

@@ -17,14 +17,13 @@ export default function ProfilePage() {
   };
  
   return (
-    <SafeAreaView style={[styles.safearea, backgroundStyle]}>
-      <View style={styles.header}>
+    <SafeAreaView style={styles.safearea, backgroundStyle} background = {theme.colors.background}>
+      <View style={styles.header}  backgroundColor = {theme.colors.headerfootercolor}>
         <Text style={[styles.tabTitle,GlobalStyle.CustomFont, { color: theme.colors.text }]}>Profile</Text>
         <LogoutButton />
       </View>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.themeToggle}>
-
         <ThemeToggleSwitch/>
             </View>
         <View style={styles.userInfo}>
@@ -67,7 +66,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
-    backgroundColor: '#fbc02d',
     elevation: 4,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -80,6 +78,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   scrollContent: {
+    height:'100%',
     paddingTop: 60,
     paddingHorizontal: 20,
   },

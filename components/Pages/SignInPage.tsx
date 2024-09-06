@@ -15,6 +15,8 @@ import ToggleSwitch from 'toggle-switch-react-native';
 import VerifyOTP from '../utils/VerifyOTP';
 import SendOTP from '../utils/SendOTP';
 import SignInForm from '../utils/SignInForm';
+import CustomButton from '../utils/CustomButton';
+import ThemeToggleSwitch from '../utils/ThemeToggleSwitch';
 
 const SignInPage = () => {
   const navigation = useNavigation();
@@ -33,7 +35,6 @@ const SignInPage = () => {
 
   const handleConfirmation = confirmation => {
     setConfirmation(confirmation);
-    console.log("sdfsjgf->>>>>>>>>>",confirmation)
   };
 
   const handleGoogleSignIn = async () => {
@@ -47,7 +48,7 @@ const SignInPage = () => {
   };
 
   return (
-    <SafeAreaView style={[styles.safearea, backgroundStyle]}>
+    <SafeAreaView style={styles.safearea} backgroundColor = {theme.colors.background}>
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.togglecontainer}>
           <Icon
@@ -64,28 +65,30 @@ const SignInPage = () => {
             labelStyle={{color: theme.colors.text, fontWeight: '600'}}
             size="large"
             onToggle={handleToggle}
-          />
+            />
+            <ThemeToggleSwitch/>
         </View>
         {!toggledtophone ? (
-          <View style={styles.formContainer}>
+          <View style={styles.formContainer} backgroundColor = {theme.colors.cardbgcolor}>
             <SignInForm />
 
-            <TouchableOpacity
-              onPress={handleGoogleSignIn}
-              style={styles.googleButton}>
-              <Icon name="logo-google" size={24} color="white" />
-              <Text style={styles.buttonText}> Log In</Text>
-            </TouchableOpacity>
+            <CustomButton
+              both = "true"
+              iconname="logo-google"
+              text=" Sign In"
+              onPress={() => handleGoogleSignIn()}
+              buttonBGColor={theme.colors.googleloginsigninbutton}
+            />
 
             <View style={styles.signupContainer}>
-              <Text style={styles.signupText}>Don't have an account?</Text>
+              <Text style={styles.signupText} color = {theme.colors.text}>Don't have an account?</Text>
               <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
                 <Text style={styles.signupButton}>Sign up</Text>
               </TouchableOpacity>
             </View>
           </View>
         ) : (
-          <View style={styles.formContainer}>
+            <View style={styles.formContainer} backgroundColor = {theme.colors.cardbgcolor}>
             {!confirmation ? (
               <SendOTP onConfirmChange={handleConfirmation} />
             ) : (

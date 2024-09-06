@@ -146,6 +146,18 @@ const TodoProvider = ({children}) => {
       showToast('Failed to bookmark todo. Please try again.');
     }
   };
+  const doneTodoItem = async (updatedTodo) => {
+    console.log(updatedTodo)
+    try {
+      const updatedTodos = allTodos.map(todo =>
+        todo.todo_id === updatedTodo.todo_id ? updatedTodo : todo,
+      );
+      await saveTodos(updatedTodos);
+    } catch (err) {
+      console.error('Error bookmarking todo:', err);
+      showToast('Failed to bookmark todo. Please try again.');
+    }
+  };
 
   const addTodoItem = async (title, bookmarked) => {
     
@@ -219,6 +231,7 @@ const TodoProvider = ({children}) => {
         updateTodoItem,
         deleteTodoItem,
         bookmarkTodoItem,
+        doneTodoItem
       }}>
       {children}
     </TodoContext.Provider>

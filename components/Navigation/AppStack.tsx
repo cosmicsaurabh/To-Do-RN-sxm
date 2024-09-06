@@ -10,7 +10,6 @@ import DetailsToDo from '../ToDoActions/DetailsToDo';
 import EditToDo from '../ToDoActions/EditToDo';
 import DeleteToDo from '../ToDoActions/DeleteToDo';
 import ProfilePage from '../Pages/ProfilePage';
-import BookmarkPage from '../Pages/BookmarkPage';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -29,12 +28,12 @@ const ProfileStack = () => (
     <Stack.Screen name="Profile-Stack" component={ProfilePage} />
   </Stack.Navigator>
 );
-const BookmarkStack = () => (
-  <Stack.Navigator screenOptions={{ headerShown: false }}>
-    <Stack.Screen name="Bookmark-Stack" component={BookmarkPage} />
+// const BookmarkStack = () => (
+//   <Stack.Navigator screenOptions={{ headerShown: false }}>
+//     <Stack.Screen name="Bookmark-Stack" component={BookmarkPage} />
     
-  </Stack.Navigator>
-);
+//   </Stack.Navigator>
+// );
 
 const AppStack = () => {
   const { theme } = useTheme(); 
@@ -44,10 +43,10 @@ const AppStack = () => {
     headerShown: false ,
     tabBarHideOnKeyboard: true,
     //  tabBarActiveTintColor: '#fbc02d',
-    tabBarActiveTintColor:'#fbc02d',
+    tabBarActiveTintColor:theme.colors.tabbarcolor,
     tabBarInactiveTintColor: theme.colors.text,
      tabBarStyle: {
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.colors.tabbarbgcolor,
       borderTopColor: theme.colors.border,
     },
   }}>
@@ -56,11 +55,11 @@ const AppStack = () => {
           <Icon name="list-outline" color={color} size={size} />
         ),
       }}  />
-    <Tab.Screen name="Bookmark" component={BookmarkStack}   options={{
+    {/* <Tab.Screen name="Bookmark" component={BookmarkStack}   options={{
         tabBarIcon: ({ color, size }) => (
           <Icon name="bookmark-outline" color={color} size={size} />
         ),
-      }}  />
+      }}  /> */}
     <Tab.Screen name= "Profile" component={ProfileStack}  options={{
         tabBarIcon: ({ color, size }) => (
           <Icon name="person-outline" color={color} size={size} />

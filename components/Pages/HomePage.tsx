@@ -64,9 +64,13 @@ function HomePage({ navigation }: any): JSX.Element {
     }
   };
 
-  const renderTodoItem = ({ item }) => (
+  const renderTodoItem = ({ item }) => {
+    const itemStyle = item.done
+    ? [styles.todoItem, { backgroundColor: theme.colors.cardbgcolor, opacity: 0.2 }]
+    : [styles.todoItem, { backgroundColor: theme.colors.cardbgcolor }];
+return(
     <TouchableOpacity key={item.id} onPress={() => handleDetailsToDo(item)}>
-      <View style={styles.todoItem}  backgroundColor = {theme.colors.cardbgcolor}>
+      <View style={itemStyle}>
         {item.done && <View style={styles.dottedLine} color={theme.colors.dottedline} />}
         <View style={styles.todoContent}>
           <Text numberOfLines={2} style={[styles.todoContentText, { color: theme.colors.text }] }>
@@ -97,7 +101,8 @@ function HomePage({ navigation }: any): JSX.Element {
         </View>
       </View>
     </TouchableOpacity>
-  );
+  )
+};
 
   return (
     <SafeAreaView style={styles.safearea}>
@@ -112,8 +117,8 @@ function HomePage({ navigation }: any): JSX.Element {
         </Text>
         <ToggleSwitch
           isOn={isBookmarkedToggled}
-          onColor="#f774d7"
-          offColor="#FF9C01"
+          onColor={theme.colors.bookmark}
+          offColor={theme.colors.cardbgcolor}
           label={isBookmarkedToggled ? 'BookMarked To-Do' : 'All To-Do'}
           labelStyle={{ color: theme.colors.text, fontWeight: '600' }}
           size="medium"

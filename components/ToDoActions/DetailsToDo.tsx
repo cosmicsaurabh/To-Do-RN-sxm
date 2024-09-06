@@ -16,10 +16,6 @@ function DetailsToDo() {
   const { todo } = route.params as { todo };
   const [contentshowing,setContentshowing] = useState(todo.title)
   
-  const backgroundStyle = {
-    backgroundColor: theme.colors.background,
-  };
-  
   const handleEditToDo = async (item) => {
     item.title = contentshowing;
     console.log("todo from detils to do page  handledittodo   ",item)
@@ -34,8 +30,8 @@ function DetailsToDo() {
   
  
   return (
-    <SafeAreaView style={styles.safearea}>
-      <View style={styles.container}>
+    <SafeAreaView style={styles.safeArea} backgroundColor = {theme.colors.background}>
+      <View style={styles.container} backgroundColor = {theme.colors.cardbgcolor}>
 
         <View style = {styles.optionsContainer}>
         <CustomButton
@@ -69,9 +65,9 @@ function DetailsToDo() {
 
         </View>
 
-      <View style={styles.detailsContainer}>
+      <View style={styles.detailsContainer} backgroundColor = {theme.colors.cardincardbgcolor}>
         <ScrollView>
-        <Text >{contentshowing}</Text>
+        <Text  style={[ { color: theme.colors.text }] }>{contentshowing}</Text>
         </ScrollView>
       </View>
         <CustomButton
@@ -90,10 +86,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   container: {
-    flexGrow: 1,
+    flex: 1,
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#232533',
     borderRadius: 10,
     elevation: 5,
     margin: 20,
@@ -107,7 +102,9 @@ const styles = StyleSheet.create({
 
   },
   detailsContainer: {
-    height: 200,
+    flexGrow:1,
+    alignItems:'center',
+    justifyContent:'center',
     elevation: 5,
     borderColor: '#cccccc',
     borderWidth: 1,
@@ -115,7 +112,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     marginBottom: 20,
     fontSize: 16,
-    color: '#CDCDE0',
     multiline: 'true',
     padding:10,
   },

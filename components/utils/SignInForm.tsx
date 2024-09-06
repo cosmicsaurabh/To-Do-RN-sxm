@@ -1,8 +1,9 @@
-import { Text,TouchableOpacity,StyleSheet } from 'react-native'
+import { Text,StyleSheet } from 'react-native'
 import React,{useState} from 'react'
 import FormField from './FormField'
 import { useAuth } from '../../context/AuthProvider'
 import { useTheme } from '../../context/ThemeProvider'
+import CustomButton from './CustomButton'
 
 const SignInForm = () => {
     const {signin}  = useAuth();
@@ -59,33 +60,17 @@ const SignInForm = () => {
     {errorText ? (
         <Text style={styles.errorText}>{errorText}</Text>
     ) : null}
-    <TouchableOpacity onPress={handleLogin} style={styles.loginButton}>
-        <Text style={[styles.buttonText, {color: theme.colors.text}]}>
-        Log in
-        </Text>
-    </TouchableOpacity>
+    
+    <CustomButton
+        text = 'LOGIN'
+        onPress={() => handleLogin()}
+        buttonBGColor={ theme.colors.loginsigninbutton}
+        />
     </>
   )
 }
 export default SignInForm;
 const styles = StyleSheet.create({
-  
-    loginButton: {
-      marginVertical: 20,
-      elevation: 8,
-      backgroundColor: '#fbc02d',
-      borderRadius: 10,
-      paddingVertical: 12,
-      paddingHorizontal: 15,
-    },
-    
-    buttonText: {
-      fontSize: 18,
-      fontWeight: 'bold',
-      alignSelf: 'center',
-      textTransform: 'uppercase',
-    },
-    
     errorText: {
       color: 'red',
       fontSize: 16,

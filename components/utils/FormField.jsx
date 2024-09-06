@@ -1,7 +1,9 @@
 import { View, TextInput, StyleSheet } from 'react-native';
 import React, { useState } from 'react';
+import { useTheme } from '@react-navigation/native';
 
 const FormField = ({ value, placeholder, handleChangeText }) => {
+  const {theme} = useTheme();
   const [isFocused, setIsFocused] = useState(false);
 
   return (
@@ -46,7 +48,6 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: 18,
-    color: '#fff',
     fontFamily: 'FiraCode-Bold',
   },
 });

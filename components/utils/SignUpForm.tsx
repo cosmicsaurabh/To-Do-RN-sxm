@@ -1,10 +1,10 @@
-import { Text,TouchableOpacity,StyleSheet } from 'react-native'
+import { Text,StyleSheet } from 'react-native'
 import React,{useState} from 'react'
 import FormField from './FormField'
 import { useAuth } from '../../context/AuthProvider'
 import { useTheme } from '../../context/ThemeProvider'
 import { useNavigation } from '@react-navigation/native';
-
+import CustomButton from './CustomButton'
 
 const SignUpForm = () => {
     const {signup}  = useAuth();
@@ -92,32 +92,17 @@ const SignUpForm = () => {
         {errorText ? (
             <Text style={styles.errorText}>{errorText}</Text>
           ) : null}
-        <TouchableOpacity onPress={handleSignUp} style={styles.signupButton}>
-        <Text style={[styles.buttonText, {color: theme.colors.text}]}>Sign Up</Text>
-        </TouchableOpacity>
+        
+        <CustomButton
+        text = 'SIGN UP'
+        onPress={() => handleSignUp()}
+        buttonBGColor={ theme.colors.loginsigninbutton}
+        />
     </>
   )
 }
 export default SignUpForm;
-const styles = StyleSheet.create({
-  
-    
-    signupButton: {
-        marginVertical: 20,
-        elevation: 8,
-        backgroundColor: "#fbc02d",
-        borderRadius: 10,
-        paddingVertical: 12,
-        paddingHorizontal: 15,
-      },
-    
-    buttonText: {
-      fontSize: 18,
-      fontWeight: 'bold',
-      alignSelf: 'center',
-      textTransform: 'uppercase',
-    },
-    
+const styles = StyleSheet.create({  
     errorText: {
       color: 'red',
       fontSize: 16,
