@@ -1,27 +1,23 @@
 import React, { useState,useEffect } from 'react';
 import { SafeAreaView, StyleSheet, View, Text,ScrollView } from 'react-native';
-import Toast from 'react-native-toast-message';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTheme } from '../../context/ThemeProvider';
 import CustomButton from '../utils/CustomButton';
-import { useTodo } from '../../context/TodoProvider';
+import useBookmarkToDo from './BookmarkToDo';
+import useDoneToDo from './DoneToDo';
 
 function DetailsToDo() {
   const navigation = useNavigation();
   const route = useRoute();
   const {theme} = useTheme();
-  const {bookmarkTodoItem} = useTodo();
+  const handleBookmarkToDo = useBookmarkToDo();
+  const handleDoneToDo = useDoneToDo()
   
   const { todo } = route.params as { todo };
   const [contentshowing,setContentshowing] = useState(todo.title)
-  console.log("todo from detils to do page    ",todo)
+  
   const backgroundStyle = {
     backgroundColor: theme.colors.background,
-  };
-  const truncateText = (text: string, maxLength: number) => {
-    return text.length > maxLength
-    ? `${text.substring(0, maxLength)}...`
-    : text;
   };
   
   const handleEditToDo = async (item) => {
@@ -35,54 +31,22 @@ function DetailsToDo() {
   const handleDeleteToDo = async( item )=> {
     navigation.navigate('DeleteToDo', {item });
   };
-  const handleBookmarkToDo = async (item) => {
-    try {
-      let updatedbookmarkstatus = item.bookmarked;
-      {
-        item.bookmarked
-          ? (updatedbookmarkstatus = 'removed from bookmark')
-          : (updatedbookmarkstatus = 'added to bookmark');
-      }
-      item.bookmarked = !item.bookmarked;
-      const newstate = item.bookmarked;
-      await bookmarkTodoItem({...item, bookmarked: newstate});
-      Toast.show({
-        type: 'success',
-        text1: 'Todo Bookmarked',
-        text2: `${truncateText(
-          item.title,
-          20,
-        )} has been ${updatedbookmarkstatus}`,
-      });
-    } catch (error) {
-      console.error('Error bookmarking todo item', error);
-      Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2: 'There was an error bookmakring the todo item.',
-      });
-    }
-  };
-//   const handleDoneToDo = async item =>{
-    
-// }
-
-
   
+ 
   return (
     <SafeAreaView style={styles.safearea}>
       <View style={styles.container}>
 
         <View style = {styles.optionsContainer}>
-        {/* <CustomButton
+        <CustomButton
         iconname={
           todo.done
-            ? 'checkmark-done-circle-outline'
-            : 'close-circle-outline'
+          ? 'close-circle-outline'
+          : 'checkmark-done-circle-outline'
         }
         onPress={() => handleDoneToDo(todo)}
-        buttonBGColor = {todo.done ? '#999999' : '#ffffff'}
-        /> */}
+        buttonBGColor={todo.done ? theme.colors.cancel : theme.colors.done}
+        />
         <CustomButton
         iconname={
           todo.bookmarked
@@ -90,17 +54,17 @@ function DetailsToDo() {
             : 'heart-circle-outline'
         }
         onPress={() => handleBookmarkToDo(todo)}
-        buttonBGColor = '#f774d7'
+        buttonBGColor={ theme.colors.bookmark}
         />
         <CustomButton
         iconname = 'create-outline'
         onPress={() => handleEditToDo(todo)}
-        buttonBGColor = '#fbc02d'
+        buttonBGColor={ theme.colors.update}
         />
         <CustomButton
         iconname = 'trash-outline'
         onPress={() => handleDeleteToDo(todo)}
-        buttonBGColor = '#f44336'
+        buttonBGColor={ theme.colors.delete}
         />
 
         </View>
@@ -113,7 +77,7 @@ function DetailsToDo() {
         <CustomButton
         text = 'ok'
         onPress={() => navigation.goBack()}
-        buttonBGColor = '#4CAF50'
+        buttonBGColor={ theme.colors.ok}
         />
       
       </View>
