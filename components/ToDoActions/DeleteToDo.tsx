@@ -1,10 +1,10 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTodo } from '../../context/TodoProvider';
 import { useTheme } from '../../context/ThemeProvider';
 import Toast from 'react-native-toast-message';
-
+import CustomButton from '../utils/CustomButton';
 
 function DeleteToDo() {
   const navigation = useNavigation();
@@ -30,13 +30,13 @@ function DeleteToDo() {
       });
       if(status === "randomm") {
         Toast.show({
-          type: 'success',
+          type: 'info',
           text1: 'Todo Deleted',
           text2: 'Random error occurred....hit the delete button again',
         });
         return;
       }
-      navigation.goBack();
+      navigation.navigate('HomePage');
     } catch (error) {
       console.error('Error deleting todo item', error);
       Toast.show({
@@ -58,12 +58,16 @@ function DeleteToDo() {
         <Text style={styles.confirmationText}>Are you sure you want to delete this To-Do?</Text>
         
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.cancelButton}>
-            <Text style={[styles.buttonText,{ color: theme.colors.text }]}>Cancel</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleDelete} style={styles.deleteButton}>
-            <Text style={[styles.buttonText,{ color: theme.colors.text }]}>Delete</Text>
-          </TouchableOpacity>
+        <CustomButton
+            text="cancel"
+            onPress={() => navigation.goBack()}
+            buttonBGColor="#cccccc"
+          />
+          <CustomButton
+            text="Delete"
+            onPress={() => handleDelete()}
+            buttonBGColor="#f44336"
+          />
           </View>
       </View>
     </SafeAreaView>
@@ -97,31 +101,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
-  cancelButton: {
-    backgroundColor: '#cccccc',
-    borderRadius: 10,
-    paddingVertical: 12,
-    paddingHorizontal: 15,
-    elevation: 5,
-    flex: 1,
-    marginRight: 10,
-  },
-  deleteButton: {
-    backgroundColor: '#f44336',
-    borderRadius: 10,
-    paddingVertical: 12,
-    paddingHorizontal: 15,
-    elevation: 5,
-    flex: 1,
-    marginLeft: 10,
-  },
-  buttonText: {
-    fontSize: 18,
-    color: "#ffffff",
-    fontWeight: "bold",
-    alignSelf: "center",
-    textTransform: "uppercase",
-  },
+  
 });
 
 export default DeleteToDo;

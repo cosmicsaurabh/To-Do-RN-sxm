@@ -4,13 +4,13 @@ import {
   TextInput,
   StyleSheet,
   View,
-  Alert,
-  TouchableOpacity,
   Text,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {useTodo} from '../../context/TodoProvider';
 import {useTheme} from '../../context/ThemeProvider';
+import CustomButton from '../utils/CustomButton';
+
 function EditToDo() {
   const navigation = useNavigation();
   const route = useRoute();
@@ -72,16 +72,16 @@ function EditToDo() {
           {error ? <Text style={styles.errorText}>{error}</Text> : null}
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={handleCancel} style={styles.cancelButton}>
-            <Text style={[styles.buttonText, {color: theme.colors.text}]}>
-              Cancel
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleUpdate} style={styles.updateButton}>
-            <Text style={[styles.buttonText, {color: theme.colors.text}]}>
-              Update
-            </Text>
-          </TouchableOpacity>
+          <CustomButton
+            text="cancel"
+            onPress={() => navigation.goBack()}
+            buttonBGColor="#cccccc"
+          />
+          <CustomButton
+            text="Update"
+            onPress={() => handleUpdate()}
+            buttonBGColor="#fbc02d"
+          />
         </View>
       </View>
     </SafeAreaView>
@@ -125,31 +125,12 @@ const styles = StyleSheet.create({
     color: '#CDCDE0',
     multiline: 'true',
   },
-  updateButton: {
-    backgroundColor: '#fbc02d',
-    borderRadius: 10,
-    paddingVertical: 12,
-    paddingHorizontal: 15,
-    elevation: 8,
-  },
-  cancelButton: {
-    backgroundColor: '#cccccc',
-    borderRadius: 10,
-    paddingVertical: 12,
-    paddingHorizontal: 15,
-    elevation: 5,
-  },
-  buttonText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    alignSelf: 'center',
-    textTransform: 'uppercase',
-  },
+
   errorText: {
     color: 'red',
     fontSize: 16,
     marginBottom: 10,
-    textAlign: 'center', 
+    textAlign: 'center',
   },
 });
 

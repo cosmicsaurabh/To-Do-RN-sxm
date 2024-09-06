@@ -6,7 +6,7 @@ import { useTheme } from '../../context/ThemeProvider';
 
 import HomePage from '../Pages/HomePage';
 import AddToDo from '../ToDoActions/AddToDo';
-import ReadToDo from '../ToDoActions/ReadToDo';
+import DetailsToDo from '../ToDoActions/DetailsToDo';
 import EditToDo from '../ToDoActions/EditToDo';
 import DeleteToDo from '../ToDoActions/DeleteToDo';
 import ProfilePage from '../Pages/ProfilePage';
@@ -21,7 +21,7 @@ const HomeStack = () => (
     <Stack.Screen name="EditToDo" component={EditToDo} />
     <Stack.Screen name="DeleteToDo" component={DeleteToDo} />
     <Stack.Screen name="AddToDo" component={AddToDo} />
-    <Stack.Screen name="ReadToDo" component={ReadToDo} />
+    <Stack.Screen name="DetailsToDo" component={DetailsToDo} />
   </Stack.Navigator>
 );
 const ProfileStack = () => (

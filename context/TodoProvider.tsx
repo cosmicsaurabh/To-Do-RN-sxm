@@ -56,16 +56,16 @@ const TodoProvider = ({children}) => {
   };
   const fetchInitialTodos = async () => {
     setLoading(true);
-    await wait(200); 
-    if (Math.random() < 0.2) {
-      const randomError = 'Random error occurred during initial fetch';
-      console.error(randomError);
-      console.log("retry")
-      console.log("retry afte 2")
-      showRetryToast(randomError, () => setReload(!reload));
-      setLoading(false);
-      return;
-    }
+    // await wait(200); 
+    // if (Math.random() < 0.2) {
+    //   const randomError = 'Random error occurred during initial fetch';
+    //   console.error(randomError);
+    //   console.log("retry")
+    //   console.log("retry afte 2")
+    //   showRetryToast(randomError, () => setReload(!reload));
+    //   setLoading(false);
+    //   return;
+    // }
     
       try {
         const storedUsers = JSON.parse(await AsyncStorage.getItem('users'));
@@ -85,14 +85,14 @@ const TodoProvider = ({children}) => {
 
   const loadMoreTodos = async() => {
     setLoading(true);
-    await wait(200); // Simulate network delay
-    if (Math.random() < 0.2) {
-      const randomError = 'Random error occurred during loadmore ';
-      console.error(randomError);
-      showRetryToast(randomError, loadMoreTodos);
-      setLoading(false);
-      return { hasMore:true };
-    }
+    // await wait(200); // Simulate network delay
+    // if (Math.random() < 0.2) {
+    //   const randomError = 'Random error occurred during loadmore ';
+    //   console.error(randomError);
+    //   showRetryToast(randomError, loadMoreTodos);
+    //   setLoading(false);
+    //   return { hasMore:true };
+    // }
     try {
       const newPage = page + 1;
       const newTodos = allTodos.slice(0, newPage * ITEMS_PER_PAGE);
@@ -149,13 +149,13 @@ const TodoProvider = ({children}) => {
 
   const addTodoItem = async (title, bookmarked) => {
     
-    await wait(200); // Simulate network delay
-    if (Math.random() < 0.1) {
-      const randomError = 'Random error occurred during add To-Do';
-      console.error(randomError);
-      showToast(randomError);
-      return "randomm";
-    }
+    // await wait(200); // Simulate network delay
+    // if (Math.random() < 0.1) {
+    //   const randomError = 'Random error occurred during add To-Do';
+    //   console.error(randomError);
+    //   showToast(randomError);
+    //   return "randomm";
+    // }
     try {
       const newTodo = {
         todo_id: UUID.v4(),
@@ -175,13 +175,13 @@ const TodoProvider = ({children}) => {
   };
 
   const updateTodoItem = async updatedTodo => {
-    await wait(200); // Simulate network delay
-    if (Math.random() < .2) {
-      const randomError = 'Random error occurred during updating To-Do';
-      console.error(randomError);
-      showToast(randomError);
-      return "randomm";
-    }
+    // await wait(200); // Simulate network delay
+    // if (Math.random() < .2) {
+    //   const randomError = 'Random error occurred during updating To-Do';
+    //   console.error(randomError);
+    //   showToast(randomError);
+    //   return "randomm";
+    // }
     try {
       const updatedTodos = allTodos.map(todo =>
         todo.todo_id === updatedTodo.todo_id ? updatedTodo : todo,
@@ -194,13 +194,13 @@ const TodoProvider = ({children}) => {
   };
 
   const deleteTodoItem = async todo_id => {
-    await wait(200); // Simulate network delay
-    if (Math.random() < .2) {
-      const randomError = 'Random error occurred during Deleting To-Do';
-      console.error(randomError);
-      showToast(randomError);
-      return "randomm";
-    }
+    // await wait(200); // Simulate network delay
+    // if (Math.random() < .2) {
+    //   const randomError = 'Random error occurred during Deleting To-Do';
+    //   console.error(randomError);
+    //   showToast(randomError);
+    //   return "randomm";
+    // }
     try {
       const updatedTodos = allTodos.filter(todo => todo.todo_id !== todo_id);
       await saveTodos(updatedTodos);

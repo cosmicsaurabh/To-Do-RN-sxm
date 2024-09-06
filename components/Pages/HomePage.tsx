@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   FlatList,
@@ -11,9 +11,9 @@ import Toast from 'react-native-toast-message';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useTodo} from '../../context/TodoProvider';
 import ToggleSwitch from 'toggle-switch-react-native';
-import { useTheme } from '../../context/ThemeProvider';
+import {useTheme} from '../../context/ThemeProvider';
 import GlobalStyle from '../others/GlobalStyle';
-
+import CustomButton from '../utils/CustomButton';
 
 function HomePage({navigation}: any): JSX.Element {
   const {todos, bookmarkTodoItem, loadMoreTodos} = useTodo();
@@ -21,11 +21,11 @@ function HomePage({navigation}: any): JSX.Element {
 
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const [isBookmarkedToggled,setIsBookmarkedToggled] = useState(false);
-  let bookmarkedtodos  =[];
-  if(isBookmarkedToggled){
-    bookmarkedtodos = todos.filter(that => that.bookmarked)
-  } 
+  const [isBookmarkedToggled, setIsBookmarkedToggled] = useState(false);
+  let bookmarkedtodos = [];
+  if (isBookmarkedToggled) {
+    bookmarkedtodos = todos.filter(that => that.bookmarked);
+  }
 
   const truncateText = (text: string, maxLength: number) => {
     return text.length > maxLength
@@ -33,73 +33,22 @@ function HomePage({navigation}: any): JSX.Element {
       : text;
   };
 
-  const handleDeleteToDo = async( item )=> {
-    try {
-      navigation.navigate('DeleteToDo', {item });
-    } catch (error) {
-      console.error('Error deleting todo item', error);
-      Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2: 'There was an error deleting the todo item.',
-      });
-    }
-  };
 
+  const handleLoadMore = async () => {
+    if (loading || !hasMore) return;
+    setLoading(true);
+    const {hasMore: more} = await loadMoreTodos();
+    setHasMore(more);
+    setLoading(false);
+  };
   const handleAddToDo = async () => {
-    const inbookmarked = isBookmarkedToggled?true:false;
-    try {
-      navigation.navigate('AddToDo', {
-        onUpdate: (newlyaddedtitle: newtitle) => {
-          Toast.show({
-            type: 'success',
-            text1: 'Todo Added',
-            text2: `${truncateText(newlyaddedtitle, 20)} has been added.`,
-          });
-        },
-      inbookmarked
-        
-      });
-    } catch (error) {
-      console.error('Error add todo item', error);
-      Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2: 'There was an error adding the todo item.',
-      });
-    }
+    const inbookmarked = isBookmarkedToggled ? true : false;
+    navigation.navigate('AddToDo',{bookmarkstatus : inbookmarked});
   };
-
-  const handleEditToDo = async (item) => {
+  const handleDetailsToDo = async todo => {
     try {
-      const previousTitle = item.title;
-      navigation.navigate('EditToDo', {
-        item,
-        onUpdate: (updatedTitle: Todoitem) => {
-          Toast.show({
-            type: 'success',
-            text1: 'Todo Updated',
-            text2: `${truncateText(
-              previousTitle,
-              20,
-            )} has been updated to ${truncateText(updatedTitle, 20)}.`,
-          });
-        },
-      });
-    } catch (error) {
-      console.error('Error updating todo item', error);
-      Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2: 'There was an error updating the todo item.',
-      });
-    }
-  };
-  const handleReadToDo = async title => {
-    try {
-      navigation.navigate('ReadToDo', {
-        title,
-      });
+      console.log('item - >handle details', todo);
+      navigation.navigate('DetailsToDo', {todo});
     } catch (error) {
       console.error('Error reading todo item', error);
       Toast.show({
@@ -137,47 +86,37 @@ function HomePage({navigation}: any): JSX.Element {
       });
     }
   };
-  const handleLoadMore = async () => {
-    if (loading || !hasMore) return;
-    setLoading(true);
-    const { hasMore: more } = await loadMoreTodos(); 
-    setHasMore(more);
-    setLoading(false);
-  };
+  // const handleDoneToDo = async item =>{
+      
+  // }
 
   const renderTodoItem = ({item}) => (
-    <TouchableOpacity key={item.id} onPress={() => handleReadToDo(item.title)}>
+    <TouchableOpacity key={item.id} onPress={() => handleDetailsToDo(item)}>
       <View style={styles.todoItem}>
         <View style={styles.todoContent}>
-        <Text style={[styles.sectionDescription, { color: theme.colors.text }]}>
+          <Text style={[styles.sectionDescription, {color: theme.colors.text}]}>
             {truncateText(item.title, 40)}
           </Text>
-          
         </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
+        <View style={styles.optionsContainer}>
+          {/* <CustomButton
+            iconname={
+              item.done
+                ? 'checkmark-done-circle-outline'
+                : 'close-circle-outline'
+            }
+            onPress={() => handleDoneToDo(item)}
+            buttonBGColor={item.done ? '#999999' : '#ffffff'}
+          /> */}
+          <CustomButton
+            iconname={
+              item.bookmarked
+                ? 'heart-dislike-circle-outline'
+                : 'heart-circle-outline'
+            }
             onPress={() => handleBookmarkToDo(item)}
-            style={styles.bookmarkButton}>
-            <Icon
-              name={
-                item.bookmarked
-                  ? 'heart-dislike-circle-outline'
-                  : 'heart-circle-outline'
-              }
-              size={24}
-              color={theme.dark? "black" : "white"}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleDeleteToDo(item)}
-            style={styles.deleteButton}>
-            <Icon name="trash-outline" size={24} color={theme.dark? "black" : "white"}/>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleEditToDo(item)}
-            style={styles.editButton}>
-            <Icon name="create-outline" size={24} color={theme.dark? "black" : "white"}/>
-          </TouchableOpacity>
+            buttonBGColor="#f774d7"
+          />
         </View>
       </View>
     </TouchableOpacity>
@@ -186,37 +125,56 @@ function HomePage({navigation}: any): JSX.Element {
   return (
     <SafeAreaView style={styles.safearea}>
       <View style={styles.header}>
-      <Text style={[styles.tabTitle,GlobalStyle.CustomFont, { color: theme.colors.text }]}>Home</Text>
+        <Text
+          style={[
+            styles.tabTitle,
+            GlobalStyle.CustomFont,
+            {color: theme.colors.text},
+          ]}>
+          Home
+        </Text>
         <ToggleSwitch
           isOn={isBookmarkedToggled}
           onColor="#f774d7"
           offColor="#FF9C01"
-          label={isBookmarkedToggled ?"BookMarked To-Do" : "All To-Do"} 
-          labelStyle={ {color: theme.colors.text, fontWeight: '600' }}
+          label={isBookmarkedToggled ? 'BookMarked To-Do' : 'All To-Do'}
+          labelStyle={{color: theme.colors.text, fontWeight: '600'}}
           size="medium"
           onToggle={() => setIsBookmarkedToggled(!isBookmarkedToggled)}
         />
       </View>
       <View style={styles.sectionContainer}>
-      {todos.length === 0 ? (
-          <Text style={[styles.emptyMessage, { color: theme.colors.text }]}>{isBookmarkedToggled?'Nothing bookmarked yet !!!':'No To-Do added yet !!!'}</Text>
+        {todos.length === 0 ? (
+          <Text style={[styles.emptyMessage, {color: theme.colors.text}]}>
+            {isBookmarkedToggled
+              ? 'Nothing bookmarked yet !!!'
+              : 'No To-Do added yet !!!'}
+          </Text>
         ) : (
           <FlatList
-          data={isBookmarkedToggled?bookmarkedtodos:todos}
-          renderItem={renderTodoItem}
-          keyExtractor={item => item.todo_id}
-          onEndReached={handleLoadMore}
-          onEndReachedThreshold={0.01}
-          ListFooterComponent={
-            loading ? <Text style={[styles.loadingText, { color: theme.colors.text }]}>Loading...</Text> : null
-          }
+            data={isBookmarkedToggled ? bookmarkedtodos : todos}
+            renderItem={renderTodoItem}
+            keyExtractor={item => item.todo_id}
+            onEndReached={handleLoadMore}
+            onEndReachedThreshold={0.01}
+            ListFooterComponent={
+              loading ? (
+                <Text style={[styles.loadingText, {color: theme.colors.text}]}>
+                  Loading...
+                </Text>
+              ) : null
+            }
           />
         )}
       </View>
 
       <View style={styles.fab}>
         <TouchableOpacity onPress={handleAddToDo}>
-          <Icon name="add-outline" size={35}color={theme.dark? "black" : "white"} />
+          <Icon
+            name="add-outline"
+            size={35}
+            color={theme.dark ? 'black' : 'white'}
+          />
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -238,42 +196,24 @@ const styles = StyleSheet.create({
     padding: 8,
     borderBottomColor: 'gray',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
+    marginRight:10,
     alignItems: 'center',
   },
   todoContent: {
-    flex: 1,
+    flex: 2,
   },
   sectionDescription: {
     marginTop: 8,
     fontSize: 18,
     fontWeight: '400',
   },
-  buttonContainer: {
-    flexDirection: 'row',
-  },
-  bookmarkButton: {
-    backgroundColor: '#f774d7',
-    borderRadius: 4,
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    marginRight: 8,
-    elevation: 2,
-  },
-  deleteButton: {
-    backgroundColor: 'red',
-    borderRadius: 4,
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    marginRight: 8,
-    elevation: 2,
-  },
-  editButton: {
-    backgroundColor: '#4CAF50',
-    borderRadius: 4,
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    elevation: 2,
+  optionsContainer:{
+    flexDirection:'row',
+    padding:5,
+    margin:5,
+    justifyContent:'space-around',
+
   },
   loadingText: {
     textAlign: 'center',
@@ -303,8 +243,6 @@ const styles = StyleSheet.create({
     color: '#333',
   },
 
-  
-  
   fab: {
     position: 'absolute',
     right: 25,

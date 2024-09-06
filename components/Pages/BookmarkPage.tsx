@@ -105,9 +105,9 @@ const handleEditToDo = async item => {
     });
   }
 };
-const handleReadToDo = async title => {
+const handleDetailsToDo = async title => {
   try {
-    navigation.navigate('ReadToDo', {
+    navigation.navigate('DetailsToDo', {
       title,
     });
   } catch (error) {
@@ -168,7 +168,7 @@ const handleLoadMore = async () => {
 };
 
 const renderTodoItem = ({item}) => (
-  <TouchableOpacity key={item.id} onPress={() => handleReadToDo(item.title)}>
+  <TouchableOpacity key={item.id} onPress={() => handleDetailsToDo(item.title)}>
     <View style={styles.todoItem}>
 
       <View style={styles.todoContent}>
